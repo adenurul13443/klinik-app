@@ -72,13 +72,13 @@
           <div class="sidebar-content">
             <ul class="nav nav-secondary">
               <li class="nav-item nav-item {{ request()->routeIs('pasien.dashboard') ? 'active' : '' }}">
-                <a href="{{ route('admin.dashboard') }}">
+                <a href="{{ route('pasien.dashboard') }}">
                   <i class="fas fa-home"></i>
                   <p>Dashboard</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#">
+                <a href="{{ route('poli') }}">
                   <i class="fa-solid fa-house-chimney-medical"></i>
                   <p>Poli</p>
                 </a>
@@ -90,7 +90,7 @@
                 <h4 class="text-section">MANAJEMEN</h4>
               </li>
               <li class="nav-item">
-                <a href="#dashboard">
+                <a href="{{ route('pasien.profile') }}">
                   <i class="fa-solid fa-user"></i>
                   <p>Profil</p>
                 </a>

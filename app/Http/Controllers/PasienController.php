@@ -169,4 +169,18 @@ class PasienController extends Controller
 
         return redirect()->route('pasien.index')->with('success', 'Pasien berhasil dihapus.');
     }
+
+    // PROFIL
+    public function profile()
+    {
+        if (!session('id')) {
+            return redirect()->route('pasien.login.form')
+                ->withErrors(['auth' => 'Silakan login terlebih dahulu.'])
+                ->with('danger', 'Silakan login terlebih dahulu!');
+        }
+    
+        $pasien = Pasien::findOrFail(session('id'));
+        return view('pasien.profil', compact('pasien'));
+    }
+    
 }

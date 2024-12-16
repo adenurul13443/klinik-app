@@ -9,6 +9,7 @@
     use App\Http\Controllers\AdminPasienController;
     use App\Http\Controllers\PoliController;
     use App\Http\Controllers\ObatController;
+    use App\Http\Controllers\JadwalPeriksaController;
     
  
     Route::get('/register', [PasienController::class, 'showRegisterForm'])->name('pasien.register.form');
@@ -73,6 +74,37 @@
     Route::get('/dashboard', [PasienController::class, 'dashboard'])->name('pasien.dashboard');
     Route::get('/dokter/dashboard', [DokterController::class, 'dashboard'])->name('dokter.dashboard');
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+
+
+    // Profil Admin
+    Route::get('admin/profil/edit', [AdminController::class, 'editProfil'])->name('admin.profil.edit');
+    Route::post('admin/profil/update', [AdminController::class, 'updateProfil'])->name('admin.profil.update');
+    Route::post('admin/profil/update-password', [AdminController::class, 'updatePassword'])->name('admin.profil.update-password');
+    
+    // Profil Pasien
+    Route::get('pasien/profil', [PasienController::class, 'profile'])->name('pasien.profile');
+    
+    //profil Dokter
+    Route::get('dokter/profil', [DokterController::class, 'showProfil'])->name('dokter.profil.show');
+
+    // Jadwal Periksa
+    use App\Http\Controllers\Admin\JadwalController;
+
+    // Route untuk Jadwal Periksa
+    Route::prefix('dokter')->group(function() {
+        Route::get('jadwal-periksa', [JadwalPeriksaController::class, 'index'])->name('jadwal-periksa');
+        Route::get('jadwal-periksa/create', [JadwalPeriksaController::class, 'create'])->name('jadwal-periksa.create');
+        Route::post('jadwal-periksa', [JadwalPeriksaController::class, 'store'])->name('jadwal-periksa.store');
+        Route::get('jadwal-periksa/{jadwal}/edit', [JadwalPeriksaController::class, 'edit'])->name('jadwal-periksa.edit');
+        Route::put('jadwal-periksa/{jadwal}', [JadwalPeriksaController::class, 'update'])->name('jadwal-periksa.update');
+        Route::delete('jadwal-periksa/{jadwal}', [JadwalPeriksaController::class, 'destroy'])->name('jadwal-periksa.destroy');
+    });
+
+    Route::resource('jadwal-periksa', JadwalPeriksaController::class);
+
+    Route::get('/poli', function () {
+        return view('pasien.poli');
+    })->name('poli');
 
     Route::get('/', function () {
         return view('homepage');

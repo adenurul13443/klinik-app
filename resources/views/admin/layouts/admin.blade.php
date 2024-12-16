@@ -11,7 +11,7 @@
       href="assets/img/kaiadmin/favicon.ico"
       type="image/x-icon"
     />
-    <script src="{{ asset('js/sweetalert2@11.js') }}"></script>
+    <link href="{{ asset('vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
 
     <!-- Fonts and icons -->
     <script src="{{ asset('js/plugin/webfont/webfont.min.js') }}"></script>
@@ -83,7 +83,7 @@
                 </span>
                 <h4 class="text-section">MANAJEMEN DATA</h4>
               </li>
-              <li class="nav-item">
+              <li class="nav-item nav-item {{ request()->routeIs('admin.pasien.index') ? 'active' : '' }}">
                 <a href="{{ route ('admin.pasien.index') }}">
                   <i class="fa-solid fa-user"></i>
                   <p>Kelola Pasien</p>
@@ -113,8 +113,8 @@
                 </span>
                 <h4 class="text-section">MANAJEMEN</h4>
               </li>
-              <li class="nav-item">
-                <a href="#dashboard">
+              <li class="nav-item nav-item {{ request()->routeIs('admin.profil.edit') ? 'active' : '' }}">
+                <a href="{{ route ('admin.profil.edit')}}">
                   <i class="fa-solid fa-user"></i>
                   <p>Profil</p>
                 </a>

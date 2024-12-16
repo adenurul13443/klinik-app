@@ -84,7 +84,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#">
+                <a href="{{ route('jadwal-periksa') }}">
                     <i class="fa-solid fa-calendar"></i>
                   <p>Jadwal Periksa</p>
                 </a>
@@ -96,7 +96,7 @@
                 <h4 class="text-section">MANAJEMEN</h4>
               </li>
               <li class="nav-item">
-                <a href="#dashboard">
+                <a href="{{route('dokter.profil.show')}}">
                   <i class="fa-solid fa-user"></i>
                   <p>Profil</p>
                 </a>

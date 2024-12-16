@@ -60,11 +60,21 @@ class AdminController extends Controller
     {
         // Periksa apakah admin sudah login
         if (!session('id')) {
-            return redirect()->route('admin.login.form')->with('danger','Harap login terlebih dahulu.');
+            return redirect()->route('admin.login.form')->with('danger', 'Harap login terlebih dahulu.');
         }
 
-        return view('admin.dashboard');
+        $pasien = Pasien::orderBy('created_at', 'desc')->take(5)->get();
+
+        // Menghitung jumlah dokter, poli, obat, dan pasien
+        $jumlah_pasien = Pasien::count();  // Ambil jumlah pasien
+        $jumlah_dokter = Dokter::count();  // Ambil jumlah dokter
+        $jumlah_poli = Poli::count();      // Ambil jumlah poli
+        $jumlah_obat = Obat::count();      // Ambil jumlah obat
+
+        return view('admin.dashboard', compact('pasien','jumlah_pasien', 'jumlah_dokter', 'jumlah_poli', 'jumlah_obat'));
+
     }
+
 
     // Menampilkan daftar dokter
     public function indexDokter()
@@ -266,14 +276,36 @@ class AdminController extends Controller
         $no_rm = $this->generateNoRM(); 
         return view('admin.pasien.index', compact('pasiens', 'no_rm'));
     }
+
     private function generateNoRM()
     {
-        $yearMonth = date('Ym');
-        $pasienCount = Pasien::whereRaw("DATE_FORMAT(created_at, '%Y%m') = ?", [$yearMonth])->count();
-        $no_rm = $yearMonth . '-' . str_pad($pasienCount + 1, STR_PAD_LEFT);
+        $yearMonth = date('Ym');  // Mendapatkan tahun-bulan saat ini
+        // Ambil semua nomor RM yang terdaftar (termasuk yang soft delete)
+        $pasienNumbers = Pasien::withTrashed()
+            ->whereRaw("DATE_FORMAT(created_at, '%Y%m') = ?", [$yearMonth])
+            ->orderBy('no_rm')
+            ->pluck('no_rm')
+            ->toArray();
+
+        // Tentukan urutan nomor RM yang seharusnya
+        $nextNoRM = 1;
+
+        // Periksa apakah nomor RM sudah ada yang hilang (terhapus)
+        foreach ($pasienNumbers as $pasienNumber) {
+            // Ambil nomor RM yang setelah pemisah '-'
+            $currentNumber = intval(explode('-', $pasienNumber)[1]);
+
+            if ($currentNumber == $nextNoRM) {
+                // Jika nomor RM berurutan, lanjutkan ke nomor berikutnya
+                $nextNoRM++;
+            }
+        }
+
+        // Buat nomor RM baru
+        $no_rm = $yearMonth . '-' . $nextNoRM;
+
         return $no_rm;
     }
-    
 
     // Menampilkan form untuk tambah pasien
     public function createPasien()
@@ -291,12 +323,16 @@ class AdminController extends Controller
             'no_hp' => 'required|string|max:16',
         ]);
 
+        // Menentukan nomor RM baru
+        $new_no_rm = $this->generateNoRM();
+        
+        // Menyimpan pasien baru
         Pasien::create([
             'nama' => $request->nama,
             'alamat' => $request->alamat,
             'no_ktp' => $request->no_ktp,
             'no_hp' => $request->no_hp,
-            'no_rm' => $request->no_rm,
+            'no_rm' => $new_no_rm,
         ]);
 
         return redirect()->route('admin.pasien.index')->with('success', 'Pasien berhasil ditambahkan');
@@ -331,8 +367,67 @@ class AdminController extends Controller
     // Menghapus pasien
     public function destroyPasien(Pasien $pasien)
     {
+        // Soft delete pasien
         $pasien->delete();
+        
         return redirect()->route('admin.pasien.index')->with('success', 'Pasien berhasil dihapus');
+    }
+
+    // PROFIL ADMIN
+
+    // Menampilkan form edit profil
+    public function editProfil()
+    {
+        // Mengambil data admin yang sedang login
+        $admin = Admin::findOrFail(session('id'));
+        
+        return view('admin.profil', compact('admin'));
+    }
+
+    // Memperbarui profil admin
+    public function updateProfil(Request $request)
+    {
+        $validated = $request->validate([
+            'nama' => 'required|string|max:255',
+            'no_hp' => 'required|string|max:15|unique:admins,no_hp,' . session('id'),
+        ]);
+
+        // Temukan data admin yang sedang login
+        $admin = Admin::findOrFail(session('id'));
+
+        $admin->update([
+            'nama' => $validated['nama'],
+            'no_hp' => $validated['no_hp'],
+        ]);
+
+        // Update session data jika perlu
+        session(['nama' => $validated['nama'], 'no_hp' => $validated['no_hp']]);
+
+        return back()->with('success', 'Profil berhasil diperbarui');
+    }
+    // Memperbarui password admin
+    public function updatePassword(Request $request)
+    {
+        // Validasi data input
+        $validated = $request->validate([
+            'current_password' => 'required|string',
+            'new_password' => 'required|string|min:8|confirmed',
+        ]);
+
+        // Temukan data admin yang sedang login
+        $admin = Admin::findOrFail(session('id'));
+
+        // Cek apakah password lama cocok
+        if (!Hash::check($validated['current_password'], $admin->password)) {
+            return back()->withErrors('Password lama salah.');
+        }
+
+        // Update password
+        $admin->update([
+            'password' => Hash::make($validated['new_password']),
+        ]);
+
+        return back()->with('success', 'Password berhasil diperbarui');
     }
 
 }

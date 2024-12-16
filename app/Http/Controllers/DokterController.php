@@ -51,7 +51,7 @@ class DokterController extends Controller
 
     public function logout()
     {
-        session()->flush();
+        session()->forget('id_dokter');  // Hapus session saat logout
         return redirect('/')->with('success','Logout Berhasil!');
     }
 
@@ -117,6 +117,18 @@ class DokterController extends Controller
 
         return view('dokter.dashboard');
     }
+
+
+public function showProfil()
+{
+    // Mengambil data dokter berdasarkan ID yang ada di sesi
+    $dokter = Dokter::find(session('id'));
+    if (!$dokter) {
+        return redirect()->route('dokter.login.form')->with('error', 'Dokter tidak ditemukan atau belum login.');
+    }
+
+    return view('dokter.show', compact('dokter'));
+}
 }
 
 
