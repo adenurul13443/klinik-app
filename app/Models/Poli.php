@@ -16,8 +16,20 @@ class Poli extends Model
         'keterangan',
     ];
 
-    public function dokters()
+  
+     // Relasi dengan DaftarPoli
+     public function daftarPolis()
+     {
+         return $this->hasMany(DaftarPoli::class);
+     }
+     public function dokter()
+     {
+         return $this->hasMany(Dokter::class, 'id_poli');
+     }
+
+    // Relasi dengan JadwalPeriksa (Jika ada)
+    public function jadwalPeriksas()
     {
-        return $this->hasMany(Dokter::class, 'id_poli');
+        return $this->hasMany(JadwalPeriksa::class, 'id_poli');
     }
 }

@@ -71,14 +71,14 @@
         <div class="sidebar-wrapper scrollbar scrollbar-inner">
           <div class="sidebar-content">
             <ul class="nav nav-secondary">
-              <li class="nav-item nav-item {{ request()->routeIs('pasien.dashboard') ? 'active' : '' }}">
+              <li class="nav-item {{ request()->routeIs('pasien.dashboard') ? 'active' : '' }}">
                 <a href="{{ route('pasien.dashboard') }}">
                   <i class="fas fa-home"></i>
                   <p>Dashboard</p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="{{ route('poli') }}">
+              <li class="nav-item {{ request()->routeIs('pasien.daftar_poli') ? 'active' : '' }}">
+                <a href="{{ route('pasien.daftar_poli') }}">
                   <i class="fa-solid fa-house-chimney-medical"></i>
                   <p>Poli</p>
                 </a>
@@ -90,7 +90,7 @@
                 <h4 class="text-section">MANAJEMEN</h4>
               </li>
               <li class="nav-item">
-                <a href="{{ route('pasien.profile') }}">
+                <a href="{{ route('pasien.profil') }}">
                   <i class="fa-solid fa-user"></i>
                   <p>Profil</p>
                 </a>

@@ -1,5 +1,5 @@
 @extends('dokter.layouts.dashboard-dokter')
-
+<title>Jadwal Periksa</title>
 @section('content')
     <div class="container mt-3 mb-5 p-3">
         <h1>Daftar Jadwal Periksa</h1>

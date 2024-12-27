@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JadwalPeriksa;
+use App\Models\Periksa;
+use App\Models\DetailPeriksa;
 use App\Models\Dokter;
 use App\Models\Poli;
 use Illuminate\Http\Request;
@@ -115,7 +118,20 @@ class DokterController extends Controller
             return redirect()->route('dokter.login.form')->withErrors(['auth' => 'Silakan login terlebih dahulu.']);
         }
 
-        return view('dokter.dashboard');
+         // Ambil ID dokter dari session
+        $dokterId = session('id');
+
+        // Ambil data dokter berdasarkan ID yang ada di session
+        $dokter = Dokter::find($dokterId);
+
+        // Ambil 5 jadwal pemeriksaan terbaru berdasarkan dokter yang login
+        $periksa = JadwalPeriksa::where('id_dokter', $dokterId)->latest()->take(3)->get();
+
+        $dokterId = session('id'); // Ambil ID dokter dari session
+        $dokter = Dokter::find($dokterId); // Ambil data dokter berdasarkan ID yang ada di session
+        $jumlah_jadwal = JadwalPeriksa::where('id_dokter', $dokterId)->count();
+    
+        return view('dokter.dashboard', compact('dokter', 'jumlah_jadwal', 'periksa'));
     }
 
 
@@ -129,6 +145,44 @@ public function showProfil()
 
     return view('dokter.show', compact('dokter'));
 }
+
+public function editProfil()
+{
+    // Mengambil data dokter berdasarkan ID yang ada di sesi
+    $dokter = Dokter::find(session('id'));
+    if (!$dokter) {
+        return redirect()->route('dokter.login.form')->with('error', 'Dokter tidak ditemukan atau belum login.');
+    }
+
+    return view('dokter.profil.show', compact('dokter'));
+}
+
+public function updateProfil(Request $request)
+{
+    // Validasi input
+    $request->validate([
+        'nama' => 'required|string|max:255',
+        'alamat' => 'required|string|max:255',
+        'no_hp' => 'required|string|max:15',
+    ]);
+
+    // Mengambil data dokter berdasarkan ID yang ada di sesi
+    $dokter = Dokter::find(session('id'));
+    if (!$dokter) {
+        return redirect()->route('dokter.login.form')->with('error', 'Dokter tidak ditemukan atau belum login.');
+    }
+
+    // Update data dokter
+    $dokter->update([
+        'nama' => $request->nama,
+        'alamat' => $request->alamat,
+        'no_hp' => $request->no_hp,
+    ]);
+
+    return redirect()->route('dokter.profil.show')->with('success', 'Profil berhasil diperbarui.');
+}
+
+
 }
 
 

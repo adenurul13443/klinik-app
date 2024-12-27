@@ -182,5 +182,7 @@ class PasienController extends Controller
         $pasien = Pasien::findOrFail(session('id'));
         return view('pasien.profil', compact('pasien'));
     }
+
+    
     
 }

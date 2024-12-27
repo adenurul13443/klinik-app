@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JadwalPeriksa;
+use App\Models\Dokter;
 use App\Models\Poli;
 use Illuminate\Http\Request;
 

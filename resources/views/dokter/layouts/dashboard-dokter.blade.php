@@ -71,22 +71,28 @@
         <div class="sidebar-wrapper scrollbar scrollbar-inner">
           <div class="sidebar-content">
             <ul class="nav nav-secondary">
-              <li class="nav-item nav-item {{ request()->routeIs('dokter.dashboard') ? 'active' : '' }}">
-                <a href="{{ route('admin.dashboard') }}">
+              <li class="nav-item {{ request()->routeIs('dokter.dashboard') ? 'active' : '' }}">
+                <a href="{{ route('dokter.dashboard') }}">
                   <i class="fas fa-home"></i>
                   <p>Dashboard</p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="#">
+              <li class="nav-item {{ request()->routeIs('dokter.periksa', ['id_dokter' => $dokter->id]) ? 'active' : '' }}">
+                <a href="{{ route('dokter.periksa', ['id_dokter' => $dokter->id]) }}">
                     <i class="fa-solid fa-briefcase-medical"></i>
                   <p>Periksa</p>
                 </a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item {{ request()->routeIs('jadwal-periksa') ? 'active' : '' }}">
                 <a href="{{ route('jadwal-periksa') }}">
                     <i class="fa-solid fa-calendar"></i>
                   <p>Jadwal Periksa</p>
+                </a>
+              </li>
+              <li class="nav-item {{ request()->routeIs('dokter.riwayat', ['id_dokter' => $dokter->id]) ? 'active' : '' }}">
+                <a href="{{ route('dokter.riwayat', ['id_dokter' => $dokter->id]) }}">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                  <p>Riwayat Periksa</p>
                 </a>
               </li>
               <li class="nav-section">
@@ -95,7 +101,7 @@
                 </span>
                 <h4 class="text-section">MANAJEMEN</h4>
               </li>
-              <li class="nav-item">
+              <li class="nav-item {{ request()->routeIs('dokter.profil.show') ? 'active' : '' }}">
                 <a href="{{route('dokter.profil.show')}}">
                   <i class="fa-solid fa-user"></i>
                   <p>Profil</p>

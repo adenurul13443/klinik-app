@@ -17,6 +17,15 @@ class Pasien extends Model
 
     protected $dates = ['deleted_at']; // Tambahkan kolom deleted_at
     
+    // public function daftarPoli()
+    // {
+    //     return $this->hasMany(DaftarPoli::class, 'id_pasien');
+    // }
+
+    public function daftarPoli()
+    {
+        return $this->hasMany(DaftarPoli::class);
+    }
 }
 
 

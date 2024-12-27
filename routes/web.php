@@ -10,6 +10,9 @@
     use App\Http\Controllers\PoliController;
     use App\Http\Controllers\ObatController;
     use App\Http\Controllers\JadwalPeriksaController;
+    use App\Http\Controllers\DaftarPoliController;
+    use App\Http\Controllers\PeriksaController;
+
     
  
     Route::get('/register', [PasienController::class, 'showRegisterForm'])->name('pasien.register.form');
@@ -82,13 +85,10 @@
     Route::post('admin/profil/update-password', [AdminController::class, 'updatePassword'])->name('admin.profil.update-password');
     
     // Profil Pasien
-    Route::get('pasien/profil', [PasienController::class, 'profile'])->name('pasien.profile');
+    Route::get('pasien/profil', [PasienController::class, 'profile'])->name('pasien.profil');
     
     //profil Dokter
     Route::get('dokter/profil', [DokterController::class, 'showProfil'])->name('dokter.profil.show');
-
-    // Jadwal Periksa
-    use App\Http\Controllers\Admin\JadwalController;
 
     // Route untuk Jadwal Periksa
     Route::prefix('dokter')->group(function() {
@@ -99,12 +99,25 @@
         Route::put('jadwal-periksa/{jadwal}', [JadwalPeriksaController::class, 'update'])->name('jadwal-periksa.update');
         Route::delete('jadwal-periksa/{jadwal}', [JadwalPeriksaController::class, 'destroy'])->name('jadwal-periksa.destroy');
     });
-
+    Route::get('/jadwal-periksa/{id}/edit', [JadwalPeriksaController::class, 'edit'])->name('jadwal-periksa.edit');
     Route::resource('jadwal-periksa', JadwalPeriksaController::class);
 
-    Route::get('/poli', function () {
-        return view('pasien.poli');
-    })->name('poli');
+    Route::get('/get-jadwal', [DaftarPoliController::class, 'getJadwal'])->name('get.jadwal');
+    Route::get('/detail-riwayat/{id}', [DaftarPoliController::class, 'detailRiwayat']);
+
+    Route::get('/dokter/profil/edit', [DokterController::class, 'editProfil'])->name('dokter.profil.edit');
+    Route::post('/dokter/profil/update', [DokterController::class, 'updateProfil'])->name('dokter.profil.update');
+
+
+// periksa
+    Route::get('/dokter/{id_dokter}/periksa', [PeriksaController::class, 'index'])->name('dokter.periksa');
+    Route::post('/dokter/{id_dokter}/periksa', [PeriksaController::class, 'store'])->name('dokter.periksa.store');
+    Route::get('/dokter/{id_dokter}/riwayat', [PeriksaController::class, 'riwayat'])->name('dokter.riwayat');
+    Route::get('/dokter/detail-riwayat/{id_periksa}', [PeriksaController::class, 'detailRiwayat'])->name('dokter.detail-riwayat');
+
+    Route::get('/daftar-poli', [DaftarPoliController::class, 'showForm'])->name('daftar_poli.form');
+    Route::post('/daftar-poli', [DaftarPoliController::class, 'store'])->name('daftar_poli.store');
+    Route::get('/daftar-poli', [DaftarPoliController::class, 'showForm'])->name('pasien.daftar_poli');
 
     Route::get('/', function () {
         return view('homepage');

@@ -18,11 +18,15 @@ class JadwalPeriksa extends Model
         'jam_selesai',
         'status',
     ];
-
-    // Relasi ke model Dokter
+    
     public function dokter()
     {
         return $this->belongsTo(Dokter::class, 'id_dokter');
+    }
+
+    public function poli()
+    {
+        return $this->belongsTo(Poli::class, 'id_poli');
     }
 }
 
