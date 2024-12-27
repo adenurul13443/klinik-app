@@ -46,5 +46,9 @@ class DaftarPoli extends Model
     {
         return $this->hasMany(DetailPeriksa::class, 'id_periksa');
     }
+    public function obat()
+{
+    return $this->belongsToMany(Obat::class);
+}
 
 }

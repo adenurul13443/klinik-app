@@ -108,30 +108,6 @@
                     <p><strong>Tanggal Periksa:</strong> {{ $riwayat->periksa->tgl_periksa }}</p>
                     <p><strong>Biaya Pemeriksaan:</strong> Rp {{ number_format($riwayat->biayaPeriksa, 0, ',', '.') }}</p>
                     <p><strong>Catatan Pemeriksaan:</strong> {{ $riwayat->periksa->catatan ?? 'Tidak ada catatan.' }}</p>
-                    
-                    <p><strong>Daftar Obat:</strong></p>
-                    @if($riwayat->detailPeriksa->count() > 0)
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Nama Obat</th>
-                                    <th>Harga</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($riwayat->detailPeriksa as $detail)
-                                    @foreach($detail->obat as $obat)
-                                        <tr>
-                                            <td>{{ $obat->nama_obat }}</td>
-                                            <td>Rp {{ number_format($obat->harga, 0, ',', '.') }}</td>
-                                        </tr>
-                                    @endforeach
-                                @endforeach
-                            </tbody>
-                        </table>
-                    @else
-                        <p>Belum ada daftar obat.</p>
-                    @endif
                 @else
                     <p>Pasien belum diperiksa.</p>
                 @endif

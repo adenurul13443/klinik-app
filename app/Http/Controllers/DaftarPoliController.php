@@ -9,6 +9,7 @@ use App\Models\DaftarPoli;
 use App\Models\DetailPeriksa;
 use App\Models\Periksa;
 use App\Models\Dokter;
+use App\Models\Obat;
 use Illuminate\Http\Request;
 
 class DaftarPoliController extends Controller

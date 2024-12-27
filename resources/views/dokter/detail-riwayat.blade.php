@@ -14,6 +14,7 @@
             <p><strong>Jam Mulai:</strong> {{ $periksa->daftarPoli->jadwal->jam_mulai }}</p>
             <p><strong>Jam Selesai:</strong> {{ $periksa->daftarPoli->jadwal->jam_selesai }}</p>
             <p><strong>Status:</strong> {{ $periksa->daftarPoli->status }}</p>
+            <p><strong>Tanggal Pemeriksaan:</strong> {{ $periksa->tgl_periksa ?? 'Tidak ada catatan.'}}</p>
             <p><strong>Catatan Pemeriksaan:</strong> {{ $periksa->catatan ?? 'Tidak ada catatan.' }}</p>
         </div>
     </div>
@@ -27,7 +28,6 @@
                         <th>No</th>
                         <th>Nama Obat</th>
                         <th>Harga</th>
-                        <th>Keterangan</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -36,7 +36,6 @@
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $detail->obat->nama_obat }}</td>
                         <td>{{ number_format($detail->obat->harga, 0, ',', '.') }}</td>
-                        <td>{{ $detail->keterangan ?? 'Tidak ada keterangan' }}</td>
                     </tr>
                     @endforeach
                 </tbody>

@@ -86,7 +86,7 @@
 
                         <div class="mb-3">
                             <label for="biaya_periksa{{ $daftarPoli->id }}" class="form-label">Biaya Periksa</label>
-                            <input type="text" class="form-control" id="biaya_periksa{{ $daftarPoli->id }}" name="biaya_periksa" value="15000" readonly>
+                            <input type="text" class="form-control" id="biaya_periksa{{ $daftarPoli->id }}" name="biaya_periksa" value="150000" readonly>
                         </div>
                     </div>
                     <div class="modal-footer">
