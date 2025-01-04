@@ -67,15 +67,13 @@ class JadwalPeriksaController extends Controller
                 'date_format:H:i',
                 function ($attribute, $value, $fail) use ($request, $dokterId) {
                     $bentrok = JadwalPeriksa::where('id_dokter', $dokterId)
-                        ->where('hari', $request->hari)
                         ->where(function ($query) use ($request) {
-                            $query->whereBetween('jam_mulai', [$request->jam_mulai, $request->jam_selesai])
-                                  ->orWhereBetween('jam_selesai', [$request->jam_mulai, $request->jam_selesai]);
+                            $query->whereBetween('hari', [$request->hari, $request->hari]);
                         })
                         ->exists();
 
                     if ($bentrok) {
-                        $fail('Jadwal bentrok dengan jadwal yang sudah ada.');
+                        $fail('Sudah ada jadwal di hari tersebut! Silahkan ganti hari.');
                     }
                 },
             ],
